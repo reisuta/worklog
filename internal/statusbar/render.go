@@ -6,6 +6,7 @@ package statusbar
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 	"time"
 
@@ -32,20 +33,40 @@ func Render(s report.Summary, cfg config.Config, now time.Time, binPath string) 
 	}
 	b.WriteString("\n---\n")
 
-	fmt.Fprintf(&b, "今日: %s (離席 %s)\n",
-		format.Duration(s.TotalSec), format.Duration(s.IdleSec))
+	// Header: date and the three headline totals.
+	fmt.Fprintf(&b, "%s\n", s.Range.Start.Format("2006-01-02 (Mon)"))
+	fmt.Fprintf(&b, "合計 %s ｜ 集中 %s ｜ 離席 %s\n",
+		format.Duration(s.TotalSec), format.Duration(s.FocusSec), format.Duration(s.IdleSec))
 	b.WriteString("---\n")
 
+	// Per-project breakdown, shown inline so no terminal is needed.
 	if len(s.ByProject) == 0 {
-		b.WriteString("記録がありません\n")
+		b.WriteString("まだ記録がありません\n")
 	} else {
-		for _, p := range s.TopProjects(5) {
+		b.WriteString("プロジェクト | size=11\n")
+		for _, p := range s.TopProjects(8) {
 			fmt.Fprintf(&b, "%s: %s\n", p.Name, format.Duration(p.Seconds))
 		}
 	}
 
+	// Focus blocks, earliest first.
+	if len(s.Focus) > 0 {
+		b.WriteString("---\n")
+		b.WriteString("集中ブロック | size=11\n")
+		blocks := append([]report.Block(nil), s.Focus...)
+		sort.SliceStable(blocks, func(i, j int) bool { return blocks[i].Start.Before(blocks[j].Start) })
+		for i, fb := range blocks {
+			if i >= 6 {
+				break
+			}
+			fmt.Fprintf(&b, "%s-%s  %s (%s)\n",
+				fb.Start.Format("15:04"), fb.End.Format("15:04"),
+				fb.Project, format.Duration(fb.Seconds()))
+		}
+	}
+
 	b.WriteString("---\n")
-	fmt.Fprintf(&b, "詳細を開く | bash='%s' param1='ui' terminal=true\n", binPath)
+	fmt.Fprintf(&b, "ターミナルで詳細を見る | bash='%s' param1='today' terminal=true\n", binPath)
 	fmt.Fprintf(&b, "停止 | bash='%s' param1='stop' terminal=false refresh=true\n", binPath)
 	return b.String()
 }

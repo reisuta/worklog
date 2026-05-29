@@ -184,7 +184,7 @@ func cmdWipe(e env, args []string) error {
 }
 
 func cmdConfig(e env) error {
-	return openInEditor(e, config.ConfigPath(), sampleConfig)
+	return openInEditor(e, config.Path(), sampleConfig)
 }
 
 // openInEditor opens path in $EDITOR, creating it with sample content first if

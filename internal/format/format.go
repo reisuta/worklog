@@ -29,15 +29,15 @@ func Duration(sec int) string {
 }
 
 // Bar renders a proportional bar of the given width using block characters.
-// value/max determines how much of the bar is filled.
-func Bar(value, max, width int) string {
+// value/total determines how much of the bar is filled.
+func Bar(value, total, width int) string {
 	if width <= 0 {
 		return ""
 	}
-	if max <= 0 {
+	if total <= 0 {
 		return strings.Repeat("░", width)
 	}
-	filled := value * width / max
+	filled := value * width / total
 	if filled > width {
 		filled = width
 	}
