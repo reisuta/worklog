@@ -11,6 +11,7 @@ import (
 	"os"
 	"path/filepath"
 
+	// Register the pure-Go "sqlite" driver for database/sql (no cgo).
 	_ "modernc.org/sqlite"
 )
 

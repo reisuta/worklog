@@ -83,7 +83,7 @@ func Default() Config {
 // Load reads the config file at the default path, layering it over Default.
 // A missing file is not an error; defaults are returned instead.
 func Load() (Config, error) {
-	return LoadFrom(ConfigPath())
+	return LoadFrom(Path())
 }
 
 // LoadFrom reads the config file at path, layering it over Default.
@@ -146,8 +146,8 @@ func configDir() string {
 	return filepath.Join(home, ".config", "worklog")
 }
 
-// ConfigPath returns the path to config.toml.
-func ConfigPath() string { return filepath.Join(configDir(), "config.toml") }
+// Path returns the path to config.toml.
+func Path() string { return filepath.Join(configDir(), "config.toml") }
 
 // RulesPath returns the path to rules.toml.
 func RulesPath() string { return filepath.Join(configDir(), "rules.toml") }
