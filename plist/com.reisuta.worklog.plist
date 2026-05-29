@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Reference launchd user agent for worklog.
+
+  `worklog install-launchd` generates this file automatically with the correct
+  absolute binary path and installs it to ~/Library/LaunchAgents. This copy is
+  kept in the repo for documentation and manual installation.
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.reisuta.worklog</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/local/bin/worklog</string>
+    <string>daemon</string>
+  </array>
+  <key>RunAtLoad</key><true/>
+  <key>KeepAlive</key><true/>
+  <key>StandardOutPath</key>
+  <string>/tmp/worklog.log</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/worklog.err</string>
+</dict>
+</plist>

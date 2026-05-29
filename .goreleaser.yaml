@@ -1,0 +1,57 @@
+# GoReleaser configuration. worklog is macOS-only and cgo-free, so we build a
+# universal-binary-friendly matrix for darwin/amd64 and darwin/arm64.
+version: 2
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: worklog
+    main: ./cmd/worklog
+    binary: worklog
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X main.version={{.Version}}
+
+  - id: worklog-statusbar
+    main: ./cmd/worklog-statusbar
+    binary: worklog-statusbar
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w
+
+archives:
+  - id: default
+    builds:
+      - worklog
+      - worklog-statusbar
+    format: tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+
+checksum:
+  name_template: "checksums.txt"
+
+release:
+  draft: true
+
+# Homebrew tap (uncomment and set your tap repo to publish a formula):
+# brews:
+#   - repository:
+#       owner: reisuta
+#       name: homebrew-tap
+#     homepage: "https://github.com/reisuta/worklog"
+#     description: "Mac の作業時間を自動記録する CLI / デーモン"
+#     license: "MIT"

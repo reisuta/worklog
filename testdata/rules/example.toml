@@ -1,0 +1,28 @@
+# Example rules used by tests and as a copy-paste starting point.
+
+[[rules]]
+match_app = "Cursor"
+match_title = ".*/my-blog.*"
+project = "blog"
+category = "work"
+
+[[rules]]
+match_app = "Cursor"
+match_title = ".*/my-app.*"
+project = "my-app"
+category = "work"
+
+[[rules]]
+match_app = "Google Chrome"
+match_title = "(?i).*(twitter|x\\.com|facebook|instagram).*"
+project = "sns"
+category = "sns"
+
+[[rules]]
+match_app = "Slack"
+project = "communication"
+category = "work"
+
+[default]
+project = "other"
+category = "other"

@@ -1,0 +1,23 @@
+# Build output
+/worklog
+/worklog-statusbar
+/dist/
+/bin/
+
+# Local data / logs (must never be committed — privacy first)
+*.db
+*.db-wal
+*.db-shm
+*.log
+*.pid
+
+# Editor / OS
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# Go
+*.test
+*.out
+coverage.txt
