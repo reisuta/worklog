@@ -10,8 +10,10 @@ import (
 	"time"
 
 	"github.com/reisuta/worklog/internal/daemon"
+	"github.com/reisuta/worklog/internal/format"
 	"github.com/reisuta/worklog/internal/report"
 	"github.com/reisuta/worklog/internal/statusbar"
+	"github.com/reisuta/worklog/internal/sysstat"
 	"github.com/reisuta/worklog/internal/tracker"
 )
 
@@ -119,8 +121,38 @@ func cmdStatusbar(e env) error {
 	if err != nil {
 		return err
 	}
+	var sys *sysstat.Snapshot
+	if e.cfg.Statusbar.ShowSystem {
+		snap := sysstat.Collect()
+		sys = &snap
+	}
 	exe, _ := os.Executable()
-	fmt.Fprint(e.out, statusbar.Render(sum, e.cfg, now, exe))
+	fmt.Fprint(e.out, statusbar.Render(sum, e.cfg, now, exe, sys))
+	return nil
+}
+
+// cmdStats prints current system resource usage to the terminal.
+func cmdStats(e env) error {
+	snap := sysstat.Collect()
+	if snap.Memory != nil {
+		m := *snap.Memory
+		pressure := map[string]string{"high": "高", "medium": "中", "low": "低", "unknown": "?"}[m.PressureLevel()]
+		fmt.Fprintf(e.out, "メモリ:      %s / %s (%.0f%%, 圧迫%s)\n",
+			format.Bytes(m.UsedBytes), format.Bytes(m.TotalBytes), m.UsedPercent(), pressure)
+	}
+	if snap.CPU != nil {
+		fmt.Fprintf(e.out, "CPU:         %.0f%%\n", *snap.CPU)
+	}
+	if snap.Battery != nil {
+		if snap.Battery.State != "" {
+			fmt.Fprintf(e.out, "バッテリー:  %d%% (%s)\n", snap.Battery.Percent, snap.Battery.State)
+		} else {
+			fmt.Fprintf(e.out, "バッテリー:  %d%%\n", snap.Battery.Percent)
+		}
+	}
+	if snap.Memory == nil && snap.CPU == nil && snap.Battery == nil {
+		fmt.Fprintln(e.out, "システム情報を取得できませんでした。")
+	}
 	return nil
 }
 

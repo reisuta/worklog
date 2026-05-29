@@ -11,7 +11,8 @@ Mac で「何に時間を使ったか」を自動記録する Go 製 CLI / デ�
 - 📊 **集計** — アプリ別 / プロジェクト別の作業時間、集中ブロック検出
 - 🏷️ **プロジェクト推論** — TOML の正規表現ルールでウィンドウタイトルからプロジェクトを自動分類
 - 💤 **アイドル検出** — `ioreg` の `HIDIdleTime` で離席を自動判定
-- 📌 **SwiftBar 連携** — メニューバーに `⏱ 4h 23m` を常時表示
+- 📌 **SwiftBar 連携** — メニューバーに `⏱ 4h 23m  🧠 60%` を常時表示(時間 + システム情報)
+- 🖥️ **システムモニタ** — メモリ / CPU / バッテリーを i3blocks 風に表示(`show_system`)
 - 🔒 **プライバシー設計** — タイトル記録のオプトアウト、機微なアプリの除外
 - 📦 **cgo 不要の単一バイナリ** — Apple Silicon / Intel 両対応
 
@@ -64,6 +65,7 @@ worklog stop         # 停止
 | `worklog today` / `yesterday` / `week` / `month` | 期間別サマリ |
 | `worklog report --from 2026-05-01 --to 2026-05-29` | 期間指定レポート |
 | `worklog statusbar` | SwiftBar 形式で当日サマリを出力 |
+| `worklog stats` | メモリ / CPU / バッテリーの現在値を表示 |
 | `worklog export --format csv --month 2026-05` | CSV / JSON エクスポート |
 | `worklog wipe --before 2026-01-01` / `--all` | データ削除 |
 | `worklog rule list` / `rule edit` | ルールの確認 / 編集 |
@@ -103,6 +105,7 @@ db_path = "~/.local/share/worklog/worklog.db"
 [statusbar]
 format = "⏱ {total}"
 focus_format = "🔥 {duration} ({project})"
+show_system = true              # メモリ/CPU/バッテリーをメニューバーに表示
 
 [privacy]
 record_window_title = true      # false にするとアプリ名のみ記録

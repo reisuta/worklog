@@ -46,6 +46,7 @@ type Reports struct {
 type Statusbar struct {
 	Format      string `toml:"format"`
 	FocusFormat string `toml:"focus_format"`
+	ShowSystem  bool   `toml:"show_system"` // show memory/CPU/battery block
 }
 
 // Privacy controls what is recorded.
@@ -72,6 +73,7 @@ func Default() Config {
 		Statusbar: Statusbar{
 			Format:      "⏱ {total}",
 			FocusFormat: "🔥 {duration} ({project})",
+			ShowSystem:  true,
 		},
 		Privacy: Privacy{
 			RecordWindowTitle: true,

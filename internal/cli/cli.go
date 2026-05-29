@@ -84,6 +84,8 @@ func Main(args []string) int {
 		cmdErr = cmdReport(e, rest)
 	case "statusbar":
 		cmdErr = cmdStatusbar(e)
+	case "stats":
+		cmdErr = cmdStats(e)
 	case "ui":
 		cmdErr = cmdUI(e)
 	case "rule":
@@ -132,6 +134,7 @@ REPORTS:
   month                 今月サマリ
   report --from D --to D  期間指定レポート (D = YYYY-MM-DD)
   statusbar             SwiftBar 形式で当日サマリを出力
+  stats                 メモリ / CPU / バッテリーの現在値を表示
   ui                    TUI ダッシュボード (未実装)
 
 DATA:
