@@ -22,6 +22,7 @@ report_dir = "~/Documents/worklog"
 [statusbar]
 format = "⏱ {total}"               # {total} が当日合計に置換される
 focus_format = "🔥 {duration} ({project})"
+show_system = true                 # メモリ/CPU/バッテリーをメニューバーに表示
 
 [privacy]
 record_window_title = true         # false にするとアプリ名のみ記録

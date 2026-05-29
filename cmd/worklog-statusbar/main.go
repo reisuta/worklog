@@ -14,6 +14,7 @@ import (
 	"github.com/reisuta/worklog/internal/report"
 	"github.com/reisuta/worklog/internal/statusbar"
 	"github.com/reisuta/worklog/internal/store"
+	"github.com/reisuta/worklog/internal/sysstat"
 )
 
 func main() {
@@ -44,6 +45,12 @@ func run() error {
 		return err
 	}
 
+	var sys *sysstat.Snapshot
+	if cfg.Statusbar.ShowSystem {
+		snap := sysstat.Collect()
+		sys = &snap
+	}
+
 	// Prefer the main worklog binary for menu actions if it's alongside us.
 	bin := "worklog"
 	if exe, err := os.Executable(); err == nil {
@@ -51,7 +58,7 @@ func run() error {
 			bin = cand
 		}
 	}
-	fmt.Print(statusbar.Render(sum, cfg, now, bin))
+	fmt.Print(statusbar.Render(sum, cfg, now, bin, sys))
 	return nil
 }
 

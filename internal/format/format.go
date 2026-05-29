@@ -28,6 +28,13 @@ func Duration(sec int) string {
 	}
 }
 
+// Bytes renders a byte count as gigabytes, e.g. "12.4 GB". Memory figures are
+// always GB-scale so a fixed unit keeps the status bar from jumping around.
+func Bytes(b uint64) string {
+	gb := float64(b) / (1 << 30)
+	return fmt.Sprintf("%.1f GB", gb)
+}
+
 // Bar renders a proportional bar of the given width using block characters.
 // value/total determines how much of the bar is filled.
 func Bar(value, total, width int) string {
